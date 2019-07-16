@@ -7,10 +7,10 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface PokemonService {
+interface PokemonTcgService {
     @GET("cards")
-    fun getCards(@Query("set") set: String): Deferred<Response<PokemonCard.PokemonCardResponse>>
+    suspend fun getCards(@Query("set") set: String): Response<PokemonCard.PokemonCardResponse>
 
     @GET("sets")
-    fun getSets(): Deferred<Response<PokemonSet.PokemonSetResponse>>
+    suspend fun getSets(): Response<PokemonSet.PokemonSetResponse>
 }

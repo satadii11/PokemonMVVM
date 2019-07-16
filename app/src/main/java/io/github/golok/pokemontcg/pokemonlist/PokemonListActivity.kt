@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.github.golok.pokemontcg.R
+import io.github.golok.pokemontcg.datastore.pokemon.PokemonLocalDataStore
+import io.github.golok.pokemontcg.datastore.pokemon.PokemonRemoteDataStore
 import io.github.golok.pokemontcg.model.PokemonCard
 import io.github.golok.pokemontcg.repository.PokemonRepository
 import io.github.golok.pokemontcg.webservice.RetrofitApp
@@ -24,10 +26,18 @@ class PokemonListActivity : AppCompatActivity() {
         adapter = PokemonListAdapter()
         rvCard.adapter = adapter
 
-        val factory = PokemonListViewModelFactory(PokemonRepository(RetrofitApp.pokemonService))
+        val factory = PokemonListViewModelFactory(
+            PokemonRepository(
+                PokemonLocalDataStore(),
+                PokemonRemoteDataStore(RetrofitApp.POKEMON_TCG_SERVICE)
+            )
+        )
         vm = ViewModelProviders.of(this, factory).get(PokemonListViewModel::class.java).apply {
-            viewState.observe(this@PokemonListActivity, Observer(this@PokemonListActivity::handleState))
-            getPokemons(set)
+            viewState.observe(
+                this@PokemonListActivity,
+                Observer(this@PokemonListActivity::handleState)
+            )
+            getPokemons(set!!)
             srlCard.setOnRefreshListener { getPokemons(set) }
         }
     }
