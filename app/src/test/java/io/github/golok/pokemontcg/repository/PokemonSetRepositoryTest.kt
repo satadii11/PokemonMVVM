@@ -1,6 +1,6 @@
 package io.github.golok.pokemontcg.repository
 
-import io.github.golok.pokemontcg.datastore.set.SetDataStore
+import io.github.golok.pokemontcg.datastore.set.PokemonSetDataStore
 import io.github.golok.pokemontcg.model.PokemonSet
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -9,30 +9,33 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 
-class SetRepositoryTest {
+class PokemonSetRepositoryTest {
     @Mock
-    var localDataStore: SetDataStore? = null
+    var localDataStore: PokemonSetDataStore? = null
 
     @Mock
-    var remoteDataStore: SetDataStore? = null
+    var remoteDataStore: PokemonSetDataStore? = null
 
-    var pokemonRepository: SetRepository? = null
-    var sets = mutableListOf<PokemonSet>()
+    var pokemonSetRepository: PokemonSetRepository? = null
+
+    var pokemonSets = mutableListOf<PokemonSet>()
 
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
-        pokemonRepository = SetRepository(localDataStore!!, remoteDataStore!!)
+        pokemonSetRepository = PokemonSetRepository.instance.apply {
+            init(localDataStore!!, remoteDataStore!!)
+        }
     }
 
     @Test
     fun shouldNotGetPokemonsFromRemoteWhenLocalIsNotNull() {
         runBlocking {
-            `when`(localDataStore?.getSets()).thenReturn(sets)
-            pokemonRepository?.getSets()
+            `when`(localDataStore?.getSets()).thenReturn(pokemonSets)
+            pokemonSetRepository?.getSets()
 
             verify(remoteDataStore, never())?.getSets()
-            verify(localDataStore, never())?.addAll(sets)
+            verify(localDataStore, never())?.addAll(pokemonSets)
         }
     }
 
@@ -40,11 +43,11 @@ class SetRepositoryTest {
     fun shouldCallGetPokemonsFromRemoteAndSaveToLocalWhenLocalIsNull() {
         runBlocking {
             `when`(localDataStore?.getSets()).thenReturn(null)
-            `when`(remoteDataStore?.getSets()).thenReturn(sets)
-            pokemonRepository?.getSets()
+            `when`(remoteDataStore?.getSets()).thenReturn(pokemonSets)
+            pokemonSetRepository?.getSets()
 
             verify(remoteDataStore, times(1))?.getSets()
-            verify(localDataStore, times(1))?.addAll(sets)
+            verify(localDataStore, times(1))?.addAll(pokemonSets)
         }
     }
 
@@ -55,7 +58,7 @@ class SetRepositoryTest {
             `when`(remoteDataStore?.getSets()).thenAnswer { throw Exception() }
 
             try {
-                pokemonRepository?.getSets()
+                pokemonSetRepository?.getSets()
             } catch (ex: Exception) {
             }
         }

@@ -2,7 +2,7 @@ package io.github.golok.pokemontcg.datastore.pokemon
 
 import io.github.golok.pokemontcg.model.PokemonCard
 
-class PokemonLocalDataStore : PokemonDataStore {
+class PokemonCardLocalDataStore : PokemonCardDataStore {
     private val caches = mutableMapOf<String, MutableList<PokemonCard>?>()
 
     override suspend fun getPokemons(set: String): MutableList<PokemonCard>? =

@@ -2,7 +2,7 @@ package io.github.golok.pokemontcg.datastore.set
 
 import io.github.golok.pokemontcg.model.PokemonSet
 
-class SetLocalDataStore : SetDataStore {
+class PokemonSetLocalDataStore : PokemonSetDataStore {
     private var caches = mutableListOf<PokemonSet>()
 
     override suspend fun getSets(): MutableList<PokemonSet>? =

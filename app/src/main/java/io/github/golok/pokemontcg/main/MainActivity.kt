@@ -6,11 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.github.golok.pokemontcg.R
-import io.github.golok.pokemontcg.datastore.set.SetLocalDataStore
-import io.github.golok.pokemontcg.datastore.set.SetRemoteDataStore
 import io.github.golok.pokemontcg.model.PokemonSet
-import io.github.golok.pokemontcg.repository.SetRepository
-import io.github.golok.pokemontcg.webservice.RetrofitApp
+import io.github.golok.pokemontcg.repository.PokemonSetRepository
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -24,12 +21,7 @@ class MainActivity : AppCompatActivity() {
         adapter = MainAdapter()
         rvSet.adapter = adapter
 
-        val factory = MainViewModelFactory(
-            SetRepository(
-                SetLocalDataStore(),
-                SetRemoteDataStore(RetrofitApp.POKEMON_TCG_SERVICE)
-            )
-        )
+        val factory = MainViewModelFactory(PokemonSetRepository.instance)
         vm = ViewModelProviders.of(this, factory).get(MainViewModel::class.java).apply {
             viewState.observe(this@MainActivity, Observer(this@MainActivity::handleState))
             getSets()

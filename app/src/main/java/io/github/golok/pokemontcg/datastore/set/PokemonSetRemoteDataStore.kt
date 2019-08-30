@@ -3,7 +3,8 @@ package io.github.golok.pokemontcg.datastore.set
 import io.github.golok.pokemontcg.model.PokemonSet
 import io.github.golok.pokemontcg.webservice.PokemonTcgService
 
-class SetRemoteDataStore(private val pokemonTcgService: PokemonTcgService) : SetDataStore {
+class PokemonSetRemoteDataStore(private val pokemonTcgService: PokemonTcgService) :
+    PokemonSetDataStore {
     override suspend fun getSets(): MutableList<PokemonSet>? {
         val response = pokemonTcgService.getSets()
         if (response.isSuccessful) return response.body()?.sets

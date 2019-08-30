@@ -2,14 +2,13 @@ package io.github.golok.pokemontcg.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.github.golok.pokemontcg.repository.PokemonRepository
-import io.github.golok.pokemontcg.repository.SetRepository
+import io.github.golok.pokemontcg.repository.PokemonSetRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val pokemonSets: SetRepository
+    private val pokemonSets: PokemonSetRepository
 ) : ViewModel() {
     val viewState = MutableLiveData<MainViewState>().apply {
         value = MainViewState(loading = true)
