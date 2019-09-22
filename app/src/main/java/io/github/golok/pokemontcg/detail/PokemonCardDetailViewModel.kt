@@ -1,17 +1,18 @@
 package io.github.golok.pokemontcg.detail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.github.golok.pokemontcg.model.PokemonCard
 
 class PokemonCardDetailViewModel : ViewModel() {
-    val viewState = MutableLiveData<PokemonCardDetailViewState>()
-
-    init {
-        viewState.value = PokemonCardDetailViewState(null)
+    private val mViewState = MutableLiveData<PokemonCardDetailViewState>().apply {
+        value = PokemonCardDetailViewState(null)
     }
+    val viewState: LiveData<PokemonCardDetailViewState>
+        get() = mViewState
 
     fun setData(pokemonCard: PokemonCard) {
-        viewState.value = viewState.value?.copy(data = pokemonCard)
+        mViewState.value = mViewState.value?.copy(data = pokemonCard)
     }
 }
