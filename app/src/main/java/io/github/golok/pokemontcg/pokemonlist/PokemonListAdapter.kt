@@ -1,13 +1,12 @@
 package io.github.golok.pokemontcg.pokemonlist
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import io.github.golok.pokemontcg.R
-import io.github.golok.pokemontcg.detail.PokemonCardDetailActivity
 import io.github.golok.pokemontcg.model.PokemonCard
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_pokemon.*
@@ -42,12 +41,13 @@ class PokemonListAdapter : RecyclerView.Adapter<PokemonListAdapter.ViewHolder>()
             tvCardName.text = pokemonCard.name
             tvCardRarity.text = pokemonCard.rarity
 
-            containerView?.setOnClickListener {
-                containerView?.context?.let {
-                    val intent = Intent(it, PokemonCardDetailActivity::class.java)
-                        .putExtra(PokemonCardDetailActivity.EXTRA_POKEMON, pokemonCard)
-                    it.startActivity(intent)
-                }
+            containerView?.setOnClickListener { view ->
+                val action = PokemonListFragmentDirections
+                    .actionPokemonListFragmentToPokemonCardDetailFragment(
+                        pokemonCard,
+                        pokemonCard.name!!
+                    )
+                view.findNavController().navigate(action)
             }
         }
     }

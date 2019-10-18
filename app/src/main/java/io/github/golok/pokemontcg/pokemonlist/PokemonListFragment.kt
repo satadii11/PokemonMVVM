@@ -1,36 +1,46 @@
 package io.github.golok.pokemontcg.pokemonlist
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.navArgs
 import io.github.golok.pokemontcg.R
 import io.github.golok.pokemontcg.model.PokemonCard
 import io.github.golok.pokemontcg.repository.PokemonCardRepository
-import kotlinx.android.synthetic.main.activity_pokemon_list.*
+import kotlinx.android.synthetic.main.fragment_pokemon_list.*
 
-class PokemonListActivity : AppCompatActivity() {
+class PokemonListFragment : Fragment() {
     private lateinit var vm: PokemonListViewModel
     private lateinit var adapter: PokemonListAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pokemon_list)
+    private val args: PokemonListFragmentArgs by navArgs()
 
-        val set = intent.getStringExtra(EXTRA_SET)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = inflater.inflate(R.layout.fragment_pokemon_list, container, false)
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        println("SAYANG NAUFAL")
         adapter = PokemonListAdapter()
         rvCard.adapter = adapter
 
+        println(args.setName)
         val factory = PokemonListViewModelFactory(PokemonCardRepository.instance)
         vm = ViewModelProviders.of(this, factory).get(PokemonListViewModel::class.java).apply {
             viewState.observe(
-                this@PokemonListActivity,
-                Observer(this@PokemonListActivity::handleState)
+                this@PokemonListFragment,
+                Observer(this@PokemonListFragment::handleState)
             )
-            getPokemons(set!!)
-            srlCard.setOnRefreshListener { getPokemons(set) }
+            if (viewState.value?.data == null) getPokemons(args.setName)
+            srlCard.setOnRefreshListener { getPokemons(args.setName) }
         }
     }
 
@@ -56,9 +66,5 @@ class PokemonListActivity : AppCompatActivity() {
 
     private fun toggleLoading(loading: Boolean) {
         srlCard.isRefreshing = loading
-    }
-
-    companion object {
-        const val EXTRA_SET = "extra:set"
     }
 }

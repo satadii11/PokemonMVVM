@@ -2,6 +2,7 @@ package io.github.golok.pokemontcg.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import io.github.golok.pokemontcg.repository.PokemonSetRepository
+import io.github.golok.pokemontcg.setlist.SetListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.setMain
@@ -21,12 +22,12 @@ class MainViewModelTest {
     @Mock
     var pokemonSetRepository: PokemonSetRepository? = null
 
-    var mainViewModel: MainViewModel? = null
+    var mainViewModel: SetListViewModel? = null
 
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
-        mainViewModel = MainViewModel(pokemonSetRepository!!)
+        mainViewModel = SetListViewModel(pokemonSetRepository!!)
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
 

@@ -1,55 +1,27 @@
 package io.github.golok.pokemontcg.main
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
 import io.github.golok.pokemontcg.R
-import io.github.golok.pokemontcg.model.PokemonSet
-import io.github.golok.pokemontcg.repository.PokemonSetRepository
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var vm: MainViewModel
-    private lateinit var adapter: MainAdapter
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        adapter = MainAdapter()
-        rvSet.adapter = adapter
-
-        val factory = MainViewModelFactory(PokemonSetRepository.instance)
-        vm = ViewModelProviders.of(this, factory).get(MainViewModel::class.java).apply {
-            viewState.observe(this@MainActivity, Observer(this@MainActivity::handleState))
-            getSets()
-            srlSet.setOnRefreshListener { getSets() }
-        }
+        setSupportActionBar(tbMain)
+        navController = navHost.findNavController()
+        setupActionBarWithNavController(navController)
     }
 
-    private fun handleState(viewState: MainViewState?) {
-        viewState?.let {
-            toggleLoading(it.loading)
-            it.data?.let { data -> showData(data) }
-            it.error?.let { error -> showError(error) }
-        }
-    }
-
-    private fun showData(data: MutableList<PokemonSet>) {
-        adapter.updateData(data)
-        tvSetError.visibility = View.GONE
-        rvSet.visibility = View.VISIBLE
-    }
-
-    private fun showError(error: Exception) {
-        tvSetError.text = error.message
-        tvSetError.visibility = View.VISIBLE
-        rvSet.visibility = View.GONE
-    }
-
-    private fun toggleLoading(loading: Boolean) {
-        srlSet.isRefreshing = loading
+    override fun onSupportNavigateUp(): Boolean {
+        return super.onSupportNavigateUp() || navController.navigateUp()
     }
 }

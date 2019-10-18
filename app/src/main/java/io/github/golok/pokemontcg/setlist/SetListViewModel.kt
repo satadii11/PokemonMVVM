@@ -1,4 +1,4 @@
-package io.github.golok.pokemontcg.main
+package io.github.golok.pokemontcg.setlist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,14 +7,18 @@ import androidx.lifecycle.viewModelScope
 import io.github.golok.pokemontcg.repository.PokemonSetRepository
 import kotlinx.coroutines.launch
 
-class MainViewModel(
+class SetListViewModel(
     private val pokemonSets: PokemonSetRepository
 ) : ViewModel() {
-    private val mViewState = MutableLiveData<MainViewState>().apply {
-        value = MainViewState(loading = true)
+    private val mViewState = MutableLiveData<SetListViewState>().apply {
+        value = SetListViewState(loading = true)
     }
-    val viewState: LiveData<MainViewState>
+    val viewState: LiveData<SetListViewState>
         get() = mViewState
+
+    init {
+        getSets()
+    }
 
     fun getSets() = viewModelScope.launch {
         try {
