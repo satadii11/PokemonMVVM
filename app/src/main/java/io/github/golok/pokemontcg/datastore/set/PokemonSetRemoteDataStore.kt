@@ -13,6 +13,5 @@ class PokemonSetRemoteDataStore(private val pokemonTcgService: PokemonTcgService
     }
 
     override suspend fun addAll(sets: MutableList<PokemonSet>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

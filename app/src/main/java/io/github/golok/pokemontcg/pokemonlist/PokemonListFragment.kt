@@ -28,7 +28,6 @@ class PokemonListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        println("SAYANG NAUFAL")
         adapter = PokemonListAdapter()
         rvCard.adapter = adapter
 
