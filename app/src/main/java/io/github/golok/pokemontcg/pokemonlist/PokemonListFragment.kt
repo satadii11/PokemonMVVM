@@ -31,7 +31,6 @@ class PokemonListFragment : Fragment() {
         adapter = PokemonListAdapter()
         rvCard.adapter = adapter
 
-        println(args.setName)
         val factory = PokemonListViewModelFactory(PokemonCardRepository.instance)
         vm = ViewModelProviders.of(this, factory).get(PokemonListViewModel::class.java).apply {
             viewState.observe(
