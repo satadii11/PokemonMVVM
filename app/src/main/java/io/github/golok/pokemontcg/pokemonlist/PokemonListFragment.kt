@@ -57,6 +57,7 @@ class PokemonListFragment : Fragment() {
     }
 
     private fun showError(error: Exception) {
+        error.printStackTrace()
         tvCardError.text = error.message
         tvCardError.visibility = View.VISIBLE
         rvCard.visibility = View.GONE
