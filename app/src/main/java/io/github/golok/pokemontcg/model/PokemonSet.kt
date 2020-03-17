@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 data class PokemonSet(
     var name: String,
     @SerializedName("logoUrl") var logo: String,
-    @PrimaryKey(autoGenerate = true) var idSet: Int = 0
+    @PrimaryKey var code: String
 ) {
     data class PokemonSetResponse(
         var sets: MutableList<PokemonSet>

@@ -14,7 +14,7 @@ data class PokemonCard(
     var rarity: String?,
     var series: String?,
     var set: String?,
-    @PrimaryKey(autoGenerate = true) var idCard: Int = 0
+    @PrimaryKey var id: String
 ) : Parcelable {
     data class PokemonCardResponse(
         var cards: MutableList<PokemonCard>
